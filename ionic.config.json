@@ -1,0 +1,7 @@
+{
+  "name": "recetas-mexicanas",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
