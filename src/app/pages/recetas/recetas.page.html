@@ -1,0 +1,152 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Todas las Recetas</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="irACrear()">
+        <ion-icon name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- Filtros -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="filter"></ion-icon>
+        Filtros
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label>Región</ion-label>
+        <ion-select
+          [(ngModel)]="regionSeleccionada"
+          (ionChange)="onFiltroChange()"
+          placeholder="Todas">
+          <ion-select-option [value]="null">Todas las regiones</ion-select-option>
+          <ion-select-option
+            *ngFor="let region of regiones"
+            [value]="region">
+            {{ regionLabels[region] }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Categoría</ion-label>
+        <ion-select
+          [(ngModel)]="categoriaSeleccionada"
+          (ionChange)="onFiltroChange()"
+          placeholder="Todas">
+          <ion-select-option [value]="null">Todas las categorías</ion-select-option>
+          <ion-select-option
+            *ngFor="let categoria of categorias"
+            [value]="categoria">
+            {{ categoriaLabels[categoria] }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-button
+        expand="block"
+        fill="outline"
+        (click)="limpiarFiltros()"
+        *ngIf="regionSeleccionada || categoriaSeleccionada">
+        <ion-icon slot="start" name="close-circle"></ion-icon>
+        Limpiar filtros
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Loading -->
+  <div class="ion-text-center ion-padding" *ngIf="cargando">
+    <ion-spinner></ion-spinner>
+    <p>Cargando recetas...</p>
+  </div>
+
+  <!-- Lista de recetas -->
+  <div *ngIf="!cargando">
+    <ion-list-header *ngIf="recetasFiltradas.length > 0">
+      <ion-label>
+        <h2>{{ recetasFiltradas.length }} receta(s) encontrada(s)</h2>
+      </ion-label>
+    </ion-list-header>
+
+    <!-- Sin recetas -->
+    <div class="ion-text-center ion-padding" *ngIf="recetasFiltradas.length === 0">
+      <ion-icon name="restaurant" size="large" color="medium"></ion-icon>
+      <h3>No hay recetas</h3>
+      <p *ngIf="regionSeleccionada || categoriaSeleccionada">
+        No hay recetas con los filtros seleccionados
+      </p>
+      <p *ngIf="!regionSeleccionada && !categoriaSeleccionada">
+        Aún no has agregado recetas
+      </p>
+      <ion-button (click)="irACrear()">
+        <ion-icon slot="start" name="add"></ion-icon>
+        Crear primera receta
+      </ion-button>
+    </div>
+
+    <!-- Grid de recetas -->
+    <ion-grid *ngIf="recetasFiltradas.length > 0">
+      <ion-row>
+        <ion-col size="12" size-md="6" size-lg="4" *ngFor="let receta of recetasFiltradas">
+          <ion-card button (click)="verReceta(receta.id!)">
+            <img
+              *ngIf="receta.fotoUrl"
+              [src]="'http://localhost:3000' + receta.fotoUrl"
+              [alt]="receta.nombre"
+              class="receta-imagen">
+            <div *ngIf="!receta.fotoUrl" class="receta-imagen-placeholder">
+              <ion-icon name="image"></ion-icon>
+            </div>
+
+            <ion-card-header>
+              <ion-card-subtitle>
+                {{ categoriaLabels[receta.categoria] }}
+              </ion-card-subtitle>
+              <ion-card-title>{{ receta.nombre }}</ion-card-title>
+            </ion-card-header>
+
+            <ion-card-content>
+              <div class="receta-info">
+                <ion-chip color="primary" outline>
+                  <ion-icon name="location"></ion-icon>
+                  <ion-label>{{ regionLabels[receta.region] }}</ion-label>
+                </ion-chip>
+
+                <ion-icon
+                  *ngIf="receta.esFavorita"
+                  name="heart"
+                  color="danger"
+                  class="favorita-icon">
+                </ion-icon>
+              </div>
+
+              <p *ngIf="receta.descripcion" class="descripcion">
+                {{ receta.descripcion }}
+              </p>
+
+              <div class="meta-info">
+                <span *ngIf="receta.tiempoPreparacion">
+                  <ion-icon name="time"></ion-icon>
+                  {{ receta.tiempoPreparacion }} min
+                </span>
+                <span *ngIf="receta.porciones">
+                  <ion-icon name="people"></ion-icon>
+                  {{ receta.porciones }} porciones
+                </span>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

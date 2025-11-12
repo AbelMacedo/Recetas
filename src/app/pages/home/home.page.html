@@ -1,0 +1,126 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>
+      <ion-icon name="restaurant"></ion-icon>
+      Recetas Mexicanas
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Recetas Mexicanas</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <!-- Hero Section -->
+  <div class="hero-section">
+    <h1>🇲🇽 Sabores de México</h1>
+    <p>Descubre y guarda las mejores recetas tradicionales</p>
+  </div>
+
+  <!-- Botones de acceso rápido -->
+  <div class="quick-actions">
+    <ion-button expand="block" (click)="irACrear()" color="success">
+      <ion-icon slot="start" name="add-circle"></ion-icon>
+      Nueva Receta
+    </ion-button>
+
+    <ion-button expand="block" (click)="irABuscar()" fill="outline">
+      <ion-icon slot="start" name="search"></ion-icon>
+      Buscar Recetas
+    </ion-button>
+  </div>
+
+  <!-- Regiones de México -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="location"></ion-icon>
+        Recetas por Región
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6" *ngFor="let region of regiones">
+            <ion-button expand="block" fill="outline" (click)="verPorRegion(region)">
+              {{ regionLabels[region] }}
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Accesos directos -->
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6">
+        <ion-card button (click)="irATradicionaleS()" class="feature-card">
+          <ion-card-content class="ion-text-center">
+            <ion-icon name="book" size="large" color="primary"></ion-icon>
+            <h3>Tradicionales</h3>
+            <p>Recetas típicas regionales</p>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="6">
+        <ion-card button (click)="irAFavoritas()" class="feature-card">
+          <ion-card-content class="ion-text-center">
+            <ion-icon name="heart" size="large" color="danger"></ion-icon>
+            <h3>Favoritas</h3>
+            <p>Tus recetas guardadas</p>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- Recetas recientes -->
+  <ion-card *ngIf="recetasRecientes.length > 0">
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="time"></ion-icon>
+        Recetas Recientes
+      </ion-card-title>
+    </ion-card-header>
+    <ion-list>
+      <ion-item *ngFor="let receta of recetasRecientes" button (click)="verReceta(receta.id!)">
+        <ion-thumbnail slot="start" *ngIf="receta.fotoUrl">
+          <img [src]="'http://localhost:3000' + receta.fotoUrl" [alt]="receta.nombre">
+        </ion-thumbnail>
+        <ion-label>
+          <h2>{{ receta.nombre }}</h2>
+          <p>{{ receta.categoria }} • {{ regionLabels[receta.region] }}</p>
+        </ion-label>
+        <ion-icon *ngIf="receta.esFavorita" name="heart" color="danger" slot="end">
+        </ion-icon>
+      </ion-item>
+    </ion-list>
+  </ion-card>
+
+  <!-- Favoritas -->
+  <ion-card *ngIf="recetasFavoritas.length > 0">
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="heart"></ion-icon>
+        Tus Favoritas
+      </ion-card-title>
+    </ion-card-header>
+    <ion-list>
+      <ion-item *ngFor="let receta of recetasFavoritas" button (click)="verReceta(receta.id!)">
+        <ion-thumbnail slot="start" *ngIf="receta.fotoUrl">
+          <img [src]="'http://localhost:3000' + receta.fotoUrl" [alt]="receta.nombre">
+        </ion-thumbnail>
+        <ion-label>
+          <h2>{{ receta.nombre }}</h2>
+          <p>{{ receta.categoria }} • {{ regionLabels[receta.region] }}</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </ion-card>
+
+</ion-content>

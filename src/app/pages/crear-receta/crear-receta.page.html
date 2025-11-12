@@ -1,0 +1,212 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Nueva Receta</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form>
+    <!-- Foto -->
+    <div class="foto-container" (click)="seleccionarFoto()">
+      <img
+        *ngIf="fotoTemporal || receta.fotoUrl"
+        [src]="fotoTemporal || ('http://localhost:3000' + receta.fotoUrl)"
+        alt="Foto de la receta">
+      <div *ngIf="!fotoTemporal && !receta.fotoUrl" class="foto-placeholder">
+        <ion-icon name="camera" size="large"></ion-icon>
+        <p>Toca para agregar foto</p>
+      </div>
+    </div>
+
+    <!-- Información básica -->
+    <ion-list>
+      <ion-item>
+        <ion-label position="stacked">Nombre de la receta *</ion-label>
+        <ion-input
+          [(ngModel)]="receta.nombre"
+          name="nombre"
+          placeholder="Ej: Tacos al pastor"
+          required>
+        </ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Descripción</ion-label>
+        <ion-textarea
+          [(ngModel)]="receta.descripcion"
+          name="descripcion"
+          placeholder="Describe brevemente la receta"
+          rows="3">
+        </ion-textarea>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Región *</ion-label>
+        <ion-select [(ngModel)]="receta.region" name="region">
+          <ion-select-option
+            *ngFor="let region of regiones"
+            [value]="region">
+            {{ regionLabels[region] }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Categoría *</ion-label>
+        <ion-select [(ngModel)]="receta.categoria" name="categoria">
+          <ion-select-option
+            *ngFor="let categoria of categorias"
+            [value]="categoria">
+            {{ categoriaLabels[categoria] }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Tiempo de preparación (minutos)</ion-label>
+        <ion-input
+          type="number"
+          [(ngModel)]="receta.tiempoPreparacion"
+          name="tiempo"
+          placeholder="30">
+        </ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Porciones</ion-label>
+        <ion-input
+          type="number"
+          [(ngModel)]="receta.porciones"
+          name="porciones"
+          placeholder="4">
+        </ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Receta tradicional</ion-label>
+        <ion-toggle
+          [(ngModel)]="receta.esTradicional"
+          name="tradicional">
+        </ion-toggle>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Marcar como favorita</ion-label>
+        <ion-toggle
+          [(ngModel)]="receta.esFavorita"
+          name="favorita">
+        </ion-toggle>
+      </ion-item>
+    </ion-list>
+
+    <!-- Ingredientes -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="basket"></ion-icon>
+          Ingredientes
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item
+          *ngFor="let ingrediente of receta.ingredientes; let i = index; trackBy: trackByIndex">
+          <ion-label position="stacked">Ingrediente {{ i + 1 }}</ion-label>
+          <ion-input
+            [(ngModel)]="receta.ingredientes[i]"
+            [name]="'ingrediente-' + i"
+            placeholder="Ej: 500g de carne de cerdo">
+          </ion-input>
+          <ion-button
+            slot="end"
+            fill="clear"
+            color="danger"
+            (click)="eliminarIngrediente(i)"
+            *ngIf="receta.ingredientes.length > 1">
+            <ion-icon name="trash"></ion-icon>
+          </ion-button>
+        </ion-item>
+
+        <ion-button
+          expand="block"
+          fill="outline"
+          (click)="agregarIngrediente()">
+          <ion-icon slot="start" name="add"></ion-icon>
+          Agregar ingrediente
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Pasos -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="list"></ion-icon>
+          Preparación
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item
+          *ngFor="let paso of receta.pasos; let i = index; trackBy: trackByIndex">
+          <ion-label position="stacked">Paso {{ i + 1 }}</ion-label>
+          <ion-textarea
+            [(ngModel)]="receta.pasos[i]"
+            [name]="'paso-' + i"
+            placeholder="Describe el paso"
+            rows="3">
+          </ion-textarea>
+          <ion-button
+            slot="end"
+            fill="clear"
+            color="danger"
+            (click)="eliminarPaso(i)"
+            *ngIf="receta.pasos.length > 1">
+            <ion-icon name="trash"></ion-icon>
+          </ion-button>
+        </ion-item>
+
+        <ion-button
+          expand="block"
+          fill="outline"
+          (click)="agregarPaso()">
+          <ion-icon slot="start" name="add"></ion-icon>
+          Agregar paso
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Notas personales -->
+    <ion-list>
+      <ion-item>
+        <ion-label position="stacked">Notas personales</ion-label>
+        <ion-textarea
+          [(ngModel)]="receta.notasPersonales"
+          name="notas"
+          placeholder="Agrega notas, tips o variaciones"
+          rows="4">
+        </ion-textarea>
+      </ion-item>
+    </ion-list>
+
+    <!-- Botones -->
+    <div class="button-container">
+      <ion-button
+        expand="block"
+        color="primary"
+        (click)="guardarReceta()">
+        <ion-icon slot="start" name="save"></ion-icon>
+        Guardar Receta
+      </ion-button>
+
+      <ion-button
+        expand="block"
+        fill="outline"
+        color="medium"
+        (click)="cancelar()">
+        Cancelar
+      </ion-button>
+    </div>
+  </form>
+</ion-content>

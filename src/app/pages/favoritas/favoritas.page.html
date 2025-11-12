@@ -1,0 +1,67 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      <ion-icon name="heart"></ion-icon>
+      Recetas Favoritas
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- Loading -->
+  <div class="ion-text-center ion-padding" *ngIf="cargando">
+    <ion-spinner></ion-spinner>
+    <p>Cargando favoritas...</p>
+  </div>
+
+  <!-- Sin favoritas -->
+  <div class="ion-text-center ion-padding empty-state"
+       *ngIf="!cargando && recetasFavoritas.length === 0">
+    <ion-icon name="heart-outline" size="large" color="medium"></ion-icon>
+    <h2>No tienes recetas favoritas</h2>
+    <p>Marca tus recetas favoritas para encontrarlas rápidamente aquí</p>
+    <ion-button (click)="irABuscar()">
+      <ion-icon slot="start" name="search"></ion-icon>
+      Buscar Recetas
+    </ion-button>
+  </div>
+
+  <!-- Lista de favoritas -->
+  <ion-grid *ngIf="!cargando && recetasFavoritas.length > 0">
+    <ion-row>
+      <ion-col size="12" size-md="6" size-lg="4" *ngFor="let receta of recetasFavoritas">
+        <ion-card button (click)="verReceta(receta.id!)">
+          <img
+            *ngIf="receta.fotoUrl"
+            [src]="'http://localhost:3000' + receta.fotoUrl"
+            [alt]="receta.nombre"
+            class="receta-imagen">
+          <div *ngIf="!receta.fotoUrl" class="receta-imagen-placeholder">
+            <ion-icon name="image"></ion-icon>
+          </div>
+
+          <ion-card-header>
+            <ion-card-subtitle>
+              {{ categoriaLabels[receta.categoria] }}
+            </ion-card-subtitle>
+            <ion-card-title>{{ receta.nombre }}</ion-card-title>
+          </ion-card-header>
+
+          <ion-card-content>
+            <ion-chip color="primary" outline>
+              <ion-icon name="location"></ion-icon>
+              <ion-label>{{ regionLabels[receta.region] }}</ion-label>
+            </ion-chip>
+
+            <p *ngIf="receta.descripcion" class="descripcion">
+              {{ receta.descripcion }}
+            </p>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

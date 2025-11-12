@@ -1,0 +1,126 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ receta?.nombre || 'Receta' }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="toggleFavorita()">
+        <ion-icon
+          [name]="receta?.esFavorita ? 'heart' : 'heart-outline'"
+          [color]="receta?.esFavorita ? 'danger' : ''">
+        </ion-icon>
+      </ion-button>
+      <ion-button (click)="compartir()">
+        <ion-icon name="share-social"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="receta">
+  <!-- Imagen -->
+  <div class="receta-imagen" *ngIf="receta.fotoUrl">
+    <img [src]="'http://localhost:3000' + receta.fotoUrl" [alt]="receta.nombre">
+  </div>
+
+  <!-- Información principal -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>{{ receta.nombre }}</ion-card-title>
+      <ion-card-subtitle>
+        {{ categoriaLabels[receta.categoria] }} • {{ regionLabels[receta.region] }}
+      </ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content *ngIf="receta.descripcion">
+      <p>{{ receta.descripcion }}</p>
+    </ion-card-content>
+
+    <!-- Información adicional -->
+    <ion-item *ngIf="receta.tiempoPreparacion">
+      <ion-icon name="time" slot="start"></ion-icon>
+      <ion-label>
+        <h3>Tiempo de preparación</h3>
+        <p>{{ receta.tiempoPreparacion }} minutos</p>
+      </ion-label>
+    </ion-item>
+
+    <ion-item *ngIf="receta.porciones">
+      <ion-icon name="people" slot="start"></ion-icon>
+      <ion-label>
+        <h3>Porciones</h3>
+        <p>{{ receta.porciones }} personas</p>
+      </ion-label>
+    </ion-item>
+
+    <ion-item *ngIf="receta.esTradicional">
+      <ion-icon name="ribbon" slot="start" color="warning"></ion-icon>
+      <ion-label>
+        <h3>Receta Tradicional</h3>
+      </ion-label>
+    </ion-item>
+  </ion-card>
+
+  <!-- Ingredientes -->
+  <ion-card *ngIf="receta.ingredientes && receta.ingredientes.length > 0">
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="basket"></ion-icon>
+        Ingredientes
+      </ion-card-title>
+    </ion-card-header>
+    <ion-list>
+      <ion-item *ngFor="let ingrediente of receta.ingredientes; let i = index">
+        <ion-label class="ion-text-wrap">
+          <strong>{{ i + 1 }}.</strong> {{ ingrediente }}
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </ion-card>
+
+  <!-- Preparación -->
+  <ion-card *ngIf="receta.pasos && receta.pasos.length > 0">
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="list"></ion-icon>
+        Preparación
+      </ion-card-title>
+    </ion-card-header>
+    <ion-list>
+      <ion-item *ngFor="let paso of receta.pasos; let i = index">
+        <ion-label class="ion-text-wrap">
+          <h3><strong>Paso {{ i + 1 }}</strong></h3>
+          <p>{{ paso }}</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </ion-card>
+
+  <!-- Notas personales -->
+  <ion-card *ngIf="receta.notasPersonales">
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="create"></ion-icon>
+        Notas Personales
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>{{ receta.notasPersonales }}</p>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Botones de acción -->
+  <div class="action-buttons">
+    <ion-button expand="block" color="primary" (click)="editarReceta()">
+      <ion-icon slot="start" name="create"></ion-icon>
+      Editar Receta
+    </ion-button>
+
+    <ion-button expand="block" color="danger" fill="outline" (click)="confirmarEliminar()">
+      <ion-icon slot="start" name="trash"></ion-icon>
+      Eliminar Receta
+    </ion-button>
+  </div>
+
+</ion-content>

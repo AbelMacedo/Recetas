@@ -1,0 +1,86 @@
+.header-section {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  padding: 30px 20px;
+  text-align: center;
+  color: white;
+
+  h1 {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0 0 10px 0;
+  }
+
+  p {
+    font-size: 14px;
+    opacity: 0.9;
+    margin: 0;
+  }
+}
+
+.region-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ion-color-primary);
+}
+
+.empty-state {
+  margin-top: 100px;
+
+  ion-icon {
+    font-size: 120px;
+    margin-bottom: 20px;
+  }
+
+  h2 {
+    color: var(--ion-color-dark);
+    margin-bottom: 10px;
+  }
+
+  p {
+    color: var(--ion-color-medium);
+  }
+}
+
+.receta-imagen {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.receta-imagen-placeholder {
+  width: 100%;
+  height: 200px;
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  ion-icon {
+    font-size: 64px;
+    color: var(--ion-color-medium);
+  }
+}
+
+.descripcion {
+  font-size: 14px;
+  color: var(--ion-color-medium);
+  margin-bottom: 10px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.badges {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+
+  ion-badge {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+}

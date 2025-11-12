@@ -1,0 +1,121 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Buscar Recetas</ion-title>
+  </ion-toolbar>
+
+  <!-- Barra de búsqueda -->
+  <ion-toolbar>
+    <ion-searchbar
+      [(ngModel)]="terminoBusqueda"
+      (ionInput)="buscar($event)"
+      placeholder="Buscar por nombre o ingrediente"
+      debounce="500"
+      animated>
+    </ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- Filtros -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="filter"></ion-icon>
+        Filtros
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label>Región</ion-label>
+        <ion-select
+          [(ngModel)]="regionSeleccionada"
+          (ionChange)="onFiltroChange()"
+          placeholder="Todas">
+          <ion-select-option [value]="null">Todas las regiones</ion-select-option>
+          <ion-select-option
+            *ngFor="let region of regiones"
+            [value]="region">
+            {{ regionLabels[region] }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Categoría</ion-label>
+        <ion-select
+          [(ngModel)]="categoriaSeleccionada"
+          (ionChange)="onFiltroChange()"
+          placeholder="Todas">
+          <ion-select-option [value]="null">Todas las categorías</ion-select-option>
+          <ion-select-option
+            *ngFor="let categoria of categorias"
+            [value]="categoria">
+            {{ categoriaLabels[categoria] }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-button
+        expand="block"
+        fill="outline"
+        (click)="limpiarFiltros()"
+        *ngIf="regionSeleccionada || categoriaSeleccionada">
+        <ion-icon slot="start" name="close-circle"></ion-icon>
+        Limpiar filtros
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Loading -->
+  <div class="ion-text-center ion-padding" *ngIf="buscando">
+    <ion-spinner></ion-spinner>
+    <p>Buscando recetas...</p>
+  </div>
+
+  <!-- Sin resultados -->
+  <div class="ion-text-center ion-padding" *ngIf="sinResultados && !buscando">
+    <ion-icon name="search" size="large" color="medium"></ion-icon>
+    <h3>No se encontraron recetas</h3>
+    <p>Intenta con otros términos o ajusta los filtros</p>
+  </div>
+
+  <!-- Resultados -->
+  <ion-list *ngIf="resultados.length > 0 && !buscando">
+    <ion-list-header>
+      <ion-label>
+        <h2>{{ resultados.length }} receta(s) encontrada(s)</h2>
+      </ion-label>
+    </ion-list-header>
+
+    <ion-item
+      *ngFor="let receta of resultados"
+      button
+      (click)="verReceta(receta.id!)">
+      <ion-thumbnail slot="start" *ngIf="receta.fotoUrl">
+        <img [src]="'http://localhost:3000' + receta.fotoUrl" [alt]="receta.nombre">
+      </ion-thumbnail>
+      <ion-label class="ion-text-wrap">
+        <h2>{{ receta.nombre }}</h2>
+        <p>{{ categoriaLabels[receta.categoria] }} • {{ regionLabels[receta.region] }}</p>
+        <p *ngIf="receta.descripcion" class="descripcion">{{ receta.descripcion }}</p>
+      </ion-label>
+      <ion-icon
+        *ngIf="receta.esFavorita"
+        name="heart"
+        color="danger"
+        slot="end">
+      </ion-icon>
+    </ion-item>
+  </ion-list>
+
+  <!-- Estado inicial -->
+  <div class="ion-text-center ion-padding estado-inicial"
+       *ngIf="!buscando && !sinResultados && resultados.length === 0">
+    <ion-icon name="restaurant" size="large" color="primary"></ion-icon>
+    <h3>Busca tus recetas favoritas</h3>
+    <p>Escribe el nombre de una receta o un ingrediente</p>
+  </div>
+</ion-content>
