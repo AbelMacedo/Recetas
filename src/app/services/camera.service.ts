@@ -11,9 +11,9 @@ export class CameraService {
   async tomarFoto(): Promise<Photo | null> {
     try {
       const photo = await Camera.getPhoto({
-        quality: 90,
+        quality: 70, // Reducido para menor tamaño
         allowEditing: false,
-        resultType: CameraResultType.Uri,
+        resultType: CameraResultType.Base64, // Cambiado a Base64
         source: CameraSource.Camera
       });
 
@@ -27,9 +27,9 @@ export class CameraService {
   async seleccionarDeGaleria(): Promise<Photo | null> {
     try {
       const photo = await Camera.getPhoto({
-        quality: 90,
+        quality: 70, // Reducido para menor tamaño
         allowEditing: false,
-        resultType: CameraResultType.Uri,
+        resultType: CameraResultType.Base64, // Cambiado a Base64
         source: CameraSource.Photos
       });
 

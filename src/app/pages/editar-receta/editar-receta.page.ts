@@ -42,7 +42,7 @@ export class EditarRecetaPage implements OnInit {
     private alertController: AlertController,
     private loadingController: LoadingController,
     private toastController: ToastController
-  ) {}
+  ) { }
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
@@ -124,46 +124,27 @@ export class EditarRecetaPage implements OnInit {
 
   async tomarFoto() {
     const photo = await this.cameraService.tomarFoto();
-    if (photo && photo.webPath) {
-      this.fotoTemporal = photo.webPath;
-      await this.subirFoto(photo);
+    if (photo && photo.base64String) {
+      // Guardar base64 directamente
+      this.receta.fotoUrl = `data:image/${photo.format};base64,${photo.base64String}`;
+      this.fotoTemporal = this.receta.fotoUrl;
+      this.mostrarToast('Foto capturada correctamente', 'success');
     }
   }
 
   async seleccionarDeGaleria() {
     const photo = await this.cameraService.seleccionarDeGaleria();
-    if (photo && photo.webPath) {
-      this.fotoTemporal = photo.webPath;
-      await this.subirFoto(photo);
+    if (photo && photo.base64String) {
+      // Guardar base64 directamente
+      this.receta.fotoUrl = `data:image/${photo.format};base64,${photo.base64String}`;
+      this.fotoTemporal = this.receta.fotoUrl;
+      this.mostrarToast('Foto seleccionada correctamente', 'success');
     }
   }
 
+  // Ya no necesitamos este método
   async subirFoto(photo: any) {
-    const loading = await this.loadingController.create({
-      message: 'Subiendo foto...'
-    });
-    await loading.present();
-
-    try {
-      const file = await this.cameraService.convertirPhotoAFile(photo);
-      if (file) {
-        this.recetaService.subirFoto(file).subscribe({
-          next: (url) => {
-            this.receta.fotoUrl = url;
-            loading.dismiss();
-            this.mostrarToast('Foto actualizada correctamente', 'success');
-          },
-          error: (error) => {
-            console.error('Error al subir foto:', error);
-            loading.dismiss();
-            this.mostrarToast('Error al subir foto', 'danger');
-          }
-        });
-      }
-    } catch (error) {
-      loading.dismiss();
-      this.mostrarToast('Error al procesar foto', 'danger');
-    }
+    // Método obsoleto - ahora usamos base64 directamente
   }
 
   async guardarCambios() {
