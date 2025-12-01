@@ -13,7 +13,7 @@
     <div class="foto-container" (click)="seleccionarFoto()">
       <img
         *ngIf="fotoTemporal || receta.fotoUrl"
-        [src]="fotoTemporal || ('http://localhost:3000' + receta.fotoUrl)"
+        [src]="fotoTemporal || receta.fotoUrl"
         alt="Foto de la receta">
       <div *ngIf="!fotoTemporal && !receta.fotoUrl" class="foto-placeholder">
         <ion-icon name="camera" size="large"></ion-icon>

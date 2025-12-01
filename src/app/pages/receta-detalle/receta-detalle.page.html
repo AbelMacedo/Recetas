@@ -21,7 +21,7 @@
 <ion-content *ngIf="receta">
   <!-- Imagen -->
   <div class="receta-imagen" *ngIf="receta.fotoUrl">
-    <img [src]="'http://localhost:3000' + receta.fotoUrl" [alt]="receta.nombre">
+    <img [src]="receta.fotoUrl" [alt]="receta.nombre">
   </div>
 
   <!-- Información principal -->
