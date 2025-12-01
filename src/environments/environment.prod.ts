@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://tu-app.up.railway.app/api' // ⚠️ CAMBIA ESTO por tu URL de Railway
+  apiUrl: 'https://recetas-production-a79e.up.railway.app/api' // ⚠️ CAMBIA ESTO por tu URL de Railway
 };
