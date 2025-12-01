@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Recetas Mexicanas</string>
+    <string name="title_activity_main">Recetas Mexicanas</string>
+    <string name="package_name">com.tunombre.recetasmexicanas</string>
+    <string name="custom_url_scheme">com.tunombre.recetasmexicanas</string>
+</resources>

@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 import { Receta, Region, Categoria } from '../models/receta.model';
+import { environment } from '../../environments/environment';
 
 interface ApiResponse<T> {
   success: boolean;
@@ -15,7 +16,7 @@ interface ApiResponse<T> {
   providedIn: 'root'
 })
 export class RecetaService {
-  private apiUrl = 'http://localhost:3000/api/recetas';
+  private apiUrl = `${environment.apiUrl}/recetas`;
 
   // BehaviorSubject para actualizar la lista en tiempo real
   private recetasSubject = new BehaviorSubject<Receta[]>([]);
