@@ -113,7 +113,7 @@
     <ion-list>
       <ion-item *ngFor="let receta of recetasFavoritas" button (click)="verReceta(receta.id!)">
         <ion-thumbnail slot="start" *ngIf="receta.fotoUrl">
-          <img [src]="'http://localhost:3000' + receta.fotoUrl" [alt]="receta.nombre">
+          <img [src]="'https://recetas-backend-production.up.railway.app' + receta.fotoUrl" [alt]="receta.nombre">
         </ion-thumbnail>
         <ion-label>
           <h2>{{ receta.nombre }}</h2>
